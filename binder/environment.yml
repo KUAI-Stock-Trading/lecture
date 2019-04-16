@@ -1,4 +1,4 @@
-name: finterstellar-demo-tests
+name: finterstellar-lecture
 channels:
   - damianavila82
   - conda-forge
@@ -7,13 +7,10 @@ dependencies:
   - numpy
   - matplotlib
   - pandas
-  - scipy
-  - bokeh
   - rise
   - pip:
     - jupyterlab_latex
     - bs4
     - lxml
-    - scikit-learn
     - selenium
     - urllib3
