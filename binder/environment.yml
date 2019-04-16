@@ -1,0 +1,19 @@
+name: finterstellar-demo-tests
+channels:
+  - damianavila82
+  - conda-forge
+dependencies:
+  - python
+  - numpy
+  - matplotlib
+  - pandas
+  - scipy
+  - bokeh
+  - rise
+  - pip:
+    - jupyterlab_latex
+    - bs4
+    - lxml
+    - scikit-learn
+    - selenium
+    - urllib3
