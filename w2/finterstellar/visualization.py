@@ -16,7 +16,7 @@ class Visualize:
     
     def __init__(self):
         plt.style.use('fivethirtyeight')
-        plt.rcParams['font.family'] = 'Malgun Gothic'
+        #plt.rcParams['font.family'] = 'Malgun Gothic'
         plt.rcParams['axes.unicode_minus'] = False
         plt.rcParams['axes.grid'] = True
         plt.rcParams['lines.linewidth'] = 1.5
@@ -416,7 +416,7 @@ class VisualizeIntraday:
     
     def __init__(self):
         plt.style.use('fivethirtyeight')
-        plt.rcParams['font.family'] = 'Malgun Gothic'
+        #plt.rcParams['font.family'] = 'Malgun Gothic'
         plt.rcParams['axes.unicode_minus'] = False
         plt.rcParams['axes.grid'] = True
         plt.rcParams['lines.linewidth'] = 1.5
