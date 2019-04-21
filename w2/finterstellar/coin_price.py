@@ -1,4 +1,3 @@
-#import bs4
 import pandas as pd
 from urllib.request import urlopen
 from datetime import datetime as dt
