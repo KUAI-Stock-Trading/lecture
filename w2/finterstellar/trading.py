@@ -186,9 +186,14 @@ class Trade:
             
         print ('Accumulated return:', round((acc_rtn - 1) * 100, 2), '%', ' ( # of trade:', no_trades, ' , # of win:', no_win,' )')
         
-        avg_rtn = acc_rtn ** (1 / no_trades)
+        if no_trades > 0:
+            avg_rtn = acc_rtn ** (1 / no_trades)
+            prob_win = round((no_win / no_trades), 4)
+        else:
+            avg_rtn = 1.0
+            prob_win = 0.0
         avg_rtn = round((avg_rtn - 1), 4)
-        prob_win = round((no_win / no_trades), 4)
+        
         print('Avg return:', avg_rtn, ', Prob. of win:', prob_win)
         
         if not report == {}:
