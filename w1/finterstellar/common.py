@@ -80,16 +80,11 @@ def progress_bar(current_val, total_val, display_value, bar_length=30):
     
 def UTC_KST(t):
     KST = timezone('Asia/Seoul')
-    if type(t) == datetime:
-        print('dt')
-    else:
+    if not type(t) == datetime:
         t = datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
     time_delta = round( (datetime.now() - datetime.utcnow()).seconds / 3600 )
     if time_delta == 0 | time_delta == 24:
-        print('UTC')
         t = utc.localize(t).astimezone(KST)
-    else:
-        print(KST)
     return t
 
 

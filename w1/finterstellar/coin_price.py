@@ -78,7 +78,8 @@ class CoinPrice:
         historical_data = dict()
         for d in hp_lst:
             pt = int(d[0])/1000
-            d[0] = dt.fromtimestamp(pt).strftime('%Y-%m-%d %H:%M:%S')
+            present_time = dt.fromtimestamp(pt)
+            d[0] = fs.UTC_KST(present_time).strftime('%Y-%m-%d %H:%M:%S')
             d[1] = float(d[1])    # 시가
             d[2] = float(d[2])    # 종가
             d[3] = float(d[3])    # 고가
