@@ -12,6 +12,4 @@ dependencies:
     - jupyterlab_latex
     - bs4
     - lxml
-    - selenium
     - urllib3
-    - xlrd
