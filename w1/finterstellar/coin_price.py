@@ -7,8 +7,10 @@ import re
 
 
 class CoinPrice:
-    
+
     def bithumb_current_price(self, coin_cd='BTC'):
+        
+        p_time = str(int(present_time.timestamp()))
         
         url = 'https://api.bithumb.com/public/ticker/' + coin_cd
         
@@ -26,7 +28,10 @@ class CoinPrice:
         
         pt = js['data']['date']
         pt = int(pt)/1000
-        present_time = dt.fromtimestamp(pt).strftime('%Y-%m-%d %H:%M:%S')
+        
+        KST = datetime.timezone(datetime.timedelta(hours=9))
+        #p_time = dt.fromtimestamp(pt).strftime('%Y-%m-%d %H:%M:%S')
+        present_time = datetime.datetime(dt.fromtimestamp(pt), tzinfo=KST).strftime('%Y-%m-%d %H:%M:%S')
         
         return present_time, current_price, bid_price, ask_price
     
