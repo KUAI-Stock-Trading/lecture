@@ -7,8 +7,8 @@ import finterstellar as fs
 
 pd.plotting.deregister_matplotlib_converters()
 
-#font = 'AppleGothic'
-font = 'Arial'
+font = ''NanumSquareRound, AppleGothic, Malgun Gothic, DejaVu Sans''
+
 
 class Visualize:
         
