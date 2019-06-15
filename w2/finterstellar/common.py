@@ -24,6 +24,24 @@ def present_date():
     return d
 
 
+def a_week_ago():
+    tmp = pd.Timestamp.today().date() - pd.DateOffset(weeks=1)
+    d = tmp.strftime('%Y-%m-%d')
+    return d
+
+
+def a_month_ago():
+    tmp = pd.Timestamp.today().date() - pd.DateOffset(months=1)
+    d = tmp.strftime('%Y-%m-%d')
+    return d
+
+
+def a_year_ago():
+    tmp = pd.Timestamp.today().date() - pd.DateOffset(years=1)
+    d = tmp.strftime('%Y-%m-%d')
+    return d
+
+
 def present_time():
     d = pd.Timestamp.today().strftime('%H:%M:%S')
     return d
