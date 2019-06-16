@@ -123,31 +123,29 @@ class Trade:
         print ('As of', last_date, 'your model portfolio', cds,'needs to be composed of', strategy)
         return (strategy)
 
- 
-
     # 수익률
     def returns(self, book, s_cd, display=False, report_name='', report={}, fee=0.0):
         # 손익 계산
         cds = fs.str_list(s_cd)
-           
+
         rtn = 1.0
         book['return'] = 1
         no_trades = 0
         no_win = 0
-        
+
         for c in cds:
             buy = 0.0
             sell = 0.0
             for i in book.index:
-            
-                if book.loc[i, 'p '+c] == 'zl' or book.loc[i, 'p '+c] == 'sl' :     # long 진입
+
+                if book.loc[i, 'p ' + c] == 'zl' or book.loc[i, 'p ' + c] == 'sl':  # long 진입
                     buy = book.loc[i, c]
                     if fee > 0.0:
                         buy = round(buy * (1 + fee), 3)
                     if display:
-                        print(i, 'long '+c, buy)
-                    
-                elif book.loc[i, 'p '+c] == 'lz' or book.loc[i, 'p '+c] == 'ls' :     # long 청산
+                        print(i, 'long ' + c, buy)
+
+                elif book.loc[i, 'p ' + c] == 'lz' or book.loc[i, 'p ' + c] == 'ls':  # long 청산
                     sell = book.loc[i, c]
                     if fee > 0.0:
                         sell = round(sell * (1 - fee), 3)
@@ -158,15 +156,15 @@ class Trade:
                     if rtn > 1:
                         no_win += 1
                     if display:
-                        print(i, 'long '+c, buy, ' | unwind long '+c, sell, ' | return:', round(rtn-1, 4)*100)
-                    
-                elif book.loc[i, 'p '+c] == 'zs' or book.loc[i, 'p '+c] == 'ls' :     # short 진입
+                        print(i, 'long ' + c, buy, ' | unwind long ' + c, sell, ' | return:', round(rtn - 1, 4) * 100)
+
+                elif book.loc[i, 'p ' + c] == 'zs' or book.loc[i, 'p ' + c] == 'ls':  # short 진입
                     sell = book.loc[i, c]
                     if fee > 0.0:
                         sell = sell * (1 - fee)
                     if display:
-                        print(i, 'short '+c, sell)
-                elif book.loc[i, 'p '+c] == 'sz' or book.loc[i, 'p '+c] == 'sl' :     # short 청산
+                        print(i, 'short ' + c, sell)
+                elif book.loc[i, 'p ' + c] == 'sz' or book.loc[i, 'p ' + c] == 'sl':  # short 청산
                     buy = book.loc[i, c]
                     if fee > 0.0:
                         buy = buy * (1 + fee)
@@ -177,21 +175,28 @@ class Trade:
                     if rtn > 1:
                         no_win += 1
                     if display:
-                        print(i, 'short '+c, sell, ' | unwind short '+c, buy, ' | return:', round(rtn-1, 4)*100)
-                
-            if book.loc[i, 't '+c] == '' and book.loc[i, 'p '+c] == '':     # zero position
+                        print(i, 'short ' + c, sell, ' | unwind short ' + c, buy, ' | return:', round(rtn - 1, 4) * 100)
+
+            if book.loc[i, 't ' + c] == '' and book.loc[i, 'p ' + c] == '':  # zero position
                 buy = 0.0
                 sell = 0.0
-        
+
+        # Accumulated return
         acc_rtn = 1.0
         for i in book.index:
             rtn = book.loc[i, 'return']
             acc_rtn = acc_rtn * rtn
             book.loc[i, 'acc return'] = acc_rtn
-            
-        print (fs.FontStyle.bg_white+'Accumulated return:', round((acc_rtn - 1) * 100, 2), '%'+fs.FontStyle.end_bg, \
-               ' ( # of trade:', no_trades, ' , # of win:', no_win, ' , fee:', fee, ' )')
-        
+
+        first_day = pd.to_datetime(book.index[0])
+        last_day = pd.to_datetime(book.index[-1])
+        total_days = (last_day - first_day).days
+        annualizer = total_days / 365
+
+        print(fs.FontStyle.bg_white + 'Accumulated return:', round((acc_rtn - 1) * 100, 2), '%' + fs.FontStyle.end_bg, \
+              ' ( # of trade:', no_trades, ', # of win:', no_win, ', fee: %.2f' % (fee * 100), \
+              '%,', 'period: %.2f' % annualizer, 'yr )')
+
         if no_trades > 0:
             avg_rtn = acc_rtn ** (1 / no_trades)
             prob_win = round((no_win / no_trades), 4)
@@ -202,49 +207,85 @@ class Trade:
 
         bet = fs.Bet()
         kelly_ratio = bet.kelly_formular(prob_win)
-        kelly_ratio = round(kelly_ratio, 4) * 100
-        
-        print('Avg return:', avg_rtn, end='')
+        kelly_ratio = round(kelly_ratio, 4)
+
+        print('Avg return: %.2f' % (avg_rtn * 100), end=' %')
         if prob_win > 0.5:
             print(fs.FontStyle.orange, end='')
-        print(', Prob. of win:', prob_win, end='')
+        print(', Prob. of win: %.2f' % (prob_win * 100), end=' %')
         if prob_win > 0.5:
             print(fs.FontStyle.end_c, end='')
-        print(', Kelly ratio:', kelly_ratio)
-        
+        print(', Kelly ratio: %.2f' % (kelly_ratio * 100), end=' %')
+
+        mdd = round((book['return'].min() - 1), 4)
+        print(', MDD: %.2f' % (mdd * 100), '%')
+
         if not report == {}:
             report['acc_rtn'] = round((acc_rtn - 1) * 100, 2)
             report['no_trades'] = no_trades
-            report['avg_rtn'] = avg_rtn
-            report['prob_win'] = prob_win
-            report['kelly_ratio'] = kelly_ratio
-            report['fee'] = fee
-            
+            report['avg_rtn'] = round((avg_rtn * 100), 2)
+            report['prob_win'] = round((prob_win * 100), 2)
+            report['kelly_ratio'] = round((kelly_ratio * 100), 2)
+            report['fee'] = round((fee * 100), 2)
+            report['mdd'] = round((mdd * 100), 2)
+
         return round(acc_rtn, 4)
-    
-   
-    def benchmark_return(self, book, s_cd):
+
+    # 벤치마크 수익
+    def benchmark_return(self, book, s_cd, report_name='', report={}):
         # 벤치마크 수익률
-        if type(s_cd) == str:
-            cds = []
-            cds.append(s_cd)
-        else:
-            cds = s_cd
+
+        cds = fs.str_list(s_cd)
+
         n = len(cds)
         rtn = dict()
         acc_rtn = float()
         for c in cds:
-            rtn[c] = round (( book[c].iloc[-1] - book[c].iloc[0] ) / book[c].iloc[0] + 1, 4)
-            acc_rtn += rtn[c]/n
-        print('BM return:', round((acc_rtn - 1) * 100, 2), '%')
-        print(rtn)
-        return (round(acc_rtn, 4))
-    
-        
-    def excess_return(self, fund_rtn, bm_rtn):
-        exs_rtn = ( round(fund_rtn/bm_rtn, 4) - 1 ) * 100
-        print('Excess return:', round(exs_rtn, 2), '%')
-        return (exs_rtn)
+            rtn[c] = round((book[c].iloc[-1] - book[c].iloc[0]) / book[c].iloc[0] + 1, 4)
+            acc_rtn += rtn[c] / n
+        print('BM return:', round((acc_rtn - 1) * 100, 2), '%', rtn)
+        if not report == {}:
+            report['BM_rtn'] = (round((acc_rtn - 1) * 100, 2))
+            report['BM_rtn_A'] = (round(rtn[cds[0]] * 100, 2))
+            report['BM_rtn_B'] = (round(rtn[cds[1]] * 100, 2))
+
+        return round(acc_rtn, 4)
+
+    # 초과수익률
+    def excess_return(self, fund_rtn, bm_rtn, report_name='', report={}):
+        exs_rtn = fund_rtn - bm_rtn
+        print('Excess return: %.2f' % (exs_rtn * 100), '%', \
+              ' ( %.2f' % ((fund_rtn - 1) * 100), '- %.2f' % ((bm_rtn - 1) * 100), ')')
+        if not report == {}:
+            report['excess_rtn'] = round(exs_rtn * 100, 2)
+
+        return exs_rtn
+
+    def annualizer(self, book, cd):
+
+        first_day = pd.to_datetime(book.index[0])
+        last_day = pd.to_datetime(book.index[-1])
+        total_days = (last_day - first_day).days
+        if total_days < 1:
+            total_days = 1
+        annualizer = total_days / 365
+
+        acc_return = book['acc return'][-1] - 1
+        total_bm_return = (book[cd][-1] - book[cd][0]) / book[cd][0]
+        if annualizer >= 1:
+            annual_return = (acc_return + 1) ** (1 / annualizer) - 1
+            annual_bm_return = (total_bm_return + 1) ** (1 / annualizer) - 1
+        else:
+            annual_return = acc_return * (1 / annualizer)
+            annual_bm_return = total_bm_return * (1 / annualizer)
+        annual_return = round(annual_return, 4)
+        annual_bm_return = round(annual_bm_return, 4)
+
+        print('Annual return: %.2f' % (annual_return * 100), end=' %')
+        print(', Annual BM return: %.2f' % (annual_bm_return * 100), end=' %')
+        print(', Annual excess return: %.2f' % ((annual_return - annual_bm_return) * 100), '%')
+
+        return annual_return
 
 
     
