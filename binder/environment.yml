@@ -13,3 +13,4 @@ dependencies:
     - bs4
     - lxml
     - urllib3
+    - sklearn
