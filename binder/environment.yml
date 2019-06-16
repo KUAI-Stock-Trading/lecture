@@ -14,4 +14,4 @@ dependencies:
     - lxml
     - urllib3
     - sklearn
-    - xrld
+    - xlrd
