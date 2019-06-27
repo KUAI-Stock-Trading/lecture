@@ -1,4 +1,4 @@
-#import bs4
+import finterstellar as fs
 import pandas as pd
 from urllib.request import urlopen
 from datetime import datetime as dt
@@ -26,7 +26,8 @@ class CoinPrice:
         
         pt = js['data']['date']
         pt = int(pt)/1000
-        present_time = dt.fromtimestamp(pt).strftime('%Y-%m-%d %H:%M:%S')
+        present_time = dt.fromtimestamp(pt)
+        present_time = fs.utc_kst(present_time).strftime('%Y-%m-%d %H:%M:%S')
         
         return present_time, current_price, bid_price, ask_price
     
@@ -56,9 +57,10 @@ class CoinPrice:
             frequency = '01H'
         elif freq == 'D':
             frequency = '24H'
+        else:
+            frequency = freq
         
         historical_prices_url = 'https://www.bithumb.com/resources/chart/'+coin_cd+'_xcoinTrade_'+frequency+'.json?symbol='+coin_cd+'&resolution=0.5'
-        
         source = urlopen(historical_prices_url).read()
         data = source.decode('utf-8')
         
@@ -76,7 +78,8 @@ class CoinPrice:
         historical_data = dict()
         for d in hp_lst:
             pt = int(d[0])/1000
-            d[0] = dt.fromtimestamp(pt).strftime('%Y-%m-%d %H:%M:%S')
+            present_time = dt.fromtimestamp(pt)
+            d[0] = fs.utc_kst(present_time).strftime('%Y-%m-%d %H:%M:%S')
             d[1] = float(d[1])    # 시가
             d[2] = float(d[2])    # 종가
             d[3] = float(d[3])    # 고가
