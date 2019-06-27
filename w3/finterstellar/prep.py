@@ -1,7 +1,7 @@
+import finterstellar as fs
 import pandas as pd
 import numpy as np
 import datetime as dt
-from .common import CommonFunctions as cfs
     
 
 class LoadData:
@@ -21,7 +21,7 @@ class LoadData:
 
     
     def make_historical_price_df(self, path, s_cd):
-        cds = cfs.str_list(s_cd)
+        cds = fs.str_list(s_cd)
         dates = pd.Series()
         for c in cds:
             prices_df = self.read_investing_price(path, c)
@@ -151,6 +151,7 @@ class LoadData:
             except:
                 pass
             prices.append(float(p))
+        print(cd, len(prices))
         df[cd] = prices
         df_new = pd.DataFrame(df[cd])
         #df = df.drop(df.columns[1:], axis=1)
