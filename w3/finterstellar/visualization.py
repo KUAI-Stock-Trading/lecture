@@ -6,7 +6,7 @@ import finterstellar as fs
 
 
 pd.plotting.deregister_matplotlib_converters()
-cbd = fs.CheckDate()
+#cbd = fs.CheckDate()
 
     
 class Visualize:
