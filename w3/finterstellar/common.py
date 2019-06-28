@@ -24,6 +24,24 @@ def present_date():
     return d
 
 
+def a_week_ago():
+    tmp = pd.Timestamp.today().date() - pd.DateOffset(weeks=1)
+    d = tmp.strftime('%Y-%m-%d')
+    return d
+
+
+def a_month_ago():
+    tmp = pd.Timestamp.today().date() - pd.DateOffset(months=1)
+    d = tmp.strftime('%Y-%m-%d')
+    return d
+
+
+def a_year_ago():
+    tmp = pd.Timestamp.today().date() - pd.DateOffset(years=1)
+    d = tmp.strftime('%Y-%m-%d')
+    return d
+
+
 def present_time():
     d = pd.Timestamp.today().strftime('%H:%M:%S')
     return d
@@ -77,15 +95,25 @@ def progress_bar(current_val, total_val, display_value, bar_length=30):
                             current_val, total_val, display_value))
     sys.stdout.flush()
 
-    
+
 def utc_kst(t):
     KST = timezone('Asia/Seoul')
     if not type(t) == datetime:
         t = datetime.strptime(t, '%Y-%m-%d %H:%M:%S')
-    time_delta = round( (datetime.now() - datetime.utcnow()).seconds / 3600 )
+    time_delta = round((datetime.now() - datetime.utcnow()).seconds / 3600)
     if time_delta == 0 or time_delta == 24:
         t = utc.localize(t).astimezone(KST)
-    return t
+    return pd.to_datetime(t)
+
+
+def utc_kst_now():
+    KST = timezone('Asia/Seoul')
+    t = datetime.now()
+    time_delta = round((datetime.now() - datetime.utcnow()).seconds / 3600)
+    if time_delta == 0 or time_delta == 24:
+        t = utc.localize(t).astimezone(KST)
+    t = t.replace(tzinfo=None)
+    return pd.to_datetime(t)
 
 
 class Bet:
@@ -98,6 +126,7 @@ class Bet:
 
 
 class FontStyle:
+
     header = '\033[95m'
     end_c = '\033[0m'
     blue = '\033[94m'
@@ -106,6 +135,7 @@ class FontStyle:
     red = '\033[91m'
     bold = '\033[1m'
     underline = '\033[4m'
+
     end_bg = '\x1b[0m'
     bg_green = '\x1b[6;30;42m'
     bg_blue = '\x1b[1;30;44m'
