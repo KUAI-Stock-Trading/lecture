@@ -9,7 +9,7 @@ pd.plotting.deregister_matplotlib_converters()
 
 font = 'NanumSquareRound, AppleGothic, Malgun Gothic, DejaVu Sans'
 
-
+    
 class Visualize:
         
     today = '(' + pd.to_datetime('today').date().strftime("%y%m%d") + ') '
@@ -17,7 +17,7 @@ class Visualize:
     
     def __init__(self):
         plt.style.use('fivethirtyeight')
-        plt.rcParams['font.family'] = font
+        plt.rcParams['font.family'] = 'Malgun Gothic'
         plt.rcParams['axes.unicode_minus'] = False
         plt.rcParams['axes.grid'] = True
         plt.rcParams['lines.linewidth'] = 1.5
@@ -30,11 +30,21 @@ class Visualize:
         plt.rcParams['legend.fontsize'] = 'medium'
         plt.rcParams['figure.titlesize'] = 'medium'
 
+        
+ 
+    def str_list(self, s_cd):
+        cds = []
+        if type(s_cd) == str:
+            cds = []
+            cds.append(s_cd)
+        else:
+            cds = s_cd    
+        return(cds)
     
 
     def price_view(self, df, b_date, cd, size=(15,7), make_file=False):
         
-        cds = fs.str_list(cd)
+        cds = self.str_list(cd)
             
         fig, ax = plt.subplots(figsize=size)
         x = df.loc[b_date:].index
@@ -44,7 +54,7 @@ class Visualize:
             
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+self.today+cds[0]+' price_view.png', bbox_inches='tight')
 
                 
@@ -58,21 +68,21 @@ class Visualize:
         
         x = df.loc[b_date:].index
 
-        cds = fs.str_list(cd)
+        cds = self.str_list(cd)
         
         for c in cds:
             plt.plot(x, df.loc[b_date:, c] / df.loc[b_date, c] * 100, label=c)
             
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+self.today+cds[0]+' index_view.png', bbox_inches='tight')
 
 
     def complex_view(self, df, b_date, cd_a, cd_b, size=(15,7), make_file=False):
-
-        cds_a = fs.str_list(cd_a)
-        cds_b = fs.str_list(cd_b)
+        
+        cds_a = self.str_list(cd_a)
+        cds_b = self.str_list(cd_b)
             
         fig, ax1 = plt.subplots(figsize=size)
         x = df.loc[b_date:].index
@@ -96,14 +106,14 @@ class Visualize:
 
         ax1.legend(loc=0)
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+self.today+cds_a[0]+' complex_view.png', bbox_inches='tight')
-
-
+        
+        
     def multi_line_view(self, df, b_date, cd_a, cd_b, size=(15,7), make_file=False):
         
-        cds_a = fs.str_list(cd_a)
-        cds_b = fs.str_list(cd_b)      
+        cds_a = self.str_list(cd_a)
+        cds_b = self.str_list(cd_b)      
             
         fig, ax1 = plt.subplots(figsize=size)
         x = df.loc[b_date:].index
@@ -128,13 +138,13 @@ class Visualize:
                 
         ax1.legend(loc=0)
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+self.today+cds_a[0]+' multi_line_view.png', bbox_inches='tight')
         
             
         
     def position_view(self, df, cd, size=(15,1), make_file=False, file_name=''):
-        cds = fs.str_list(cd)    
+        cds = self.str_list(cd)    
             
         fig, ax = plt.subplots(figsize=size)
         x = df.index
@@ -152,14 +162,14 @@ class Visualize:
         plt.yticks([-1, 0, 1], ["Short", "Zero", "Long"])
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             f_name = file_name+'_position_view.png'
             plt.savefig('./image/'+f_name, bbox_inches='tight')
     
     
     def position_view_area(self, df, cd, size=(15,1), make_file=False):
 
-        cds = fs.str_list(cd)    
+        cds = self.str_list(cd)    
 
         fig, ax = plt.subplots(figsize=size)
         x = df.index
@@ -180,7 +190,7 @@ class Visualize:
         plt.yticks([-1, 0, 1], ["Short", "Zero", "Long"])
         plt.legend()        
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+self.today+cds[0]+' position_view.png', bbox_inches='tight')
             
         
@@ -202,7 +212,7 @@ class Visualize:
         
         ax1.legend(loc=0)
         
-        if make_file:
+        if make_file == True:
             f_name = file_name+'_pair_trend_view.png'
             plt.savefig('./image/'+f_name, bbox_inches='tight')
         
@@ -219,13 +229,13 @@ class Visualize:
         plt.plot(x, df[cd[1]], 'C1', lw=3)
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+self.today+cd[0]+' pair_trend_price_view.png', bbox_inches='tight')
 
             
             
-    def BB_trend_view(self, df, cd, size=(15,7), make_file=False):
-        cds = fs.str_list(cd)    
+    def bb_trend_view(self, df, cd, size=(15,7), make_file=False):
+        cds = self.str_list(cd)    
             
         fig, ax = plt.subplots(figsize=size)
         x = df.index
@@ -235,12 +245,12 @@ class Visualize:
         plt.plot(x, df[cds[0]], color='C0', linestyle='-', lw=3)
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+self.today+cds[0]+' bb_trend_view.png', bbox_inches='tight')
         
     
     def futures_basis_view(self, df, threshold, cd, size=(15,7), make_file=False):
-        cds = fs.str_list(cd)
+        cds = self.str_list(cd)
             
         fig, ax = plt.subplots(figsize=size)
         x = df.index
@@ -252,7 +262,7 @@ class Visualize:
         plt.plot(x, df[cds[1]], 'C1', lw=3)
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+self.today+cds[0]+' futures_basis_view.png', bbox_inches='tight')
         
         
@@ -273,7 +283,7 @@ class Visualize:
         plt.ylim(0-step*2, 0+step*2)
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+self.today+' value_at_expiry_view.png', bbox_inches='tight')
         
 
@@ -294,7 +304,7 @@ class Visualize:
         plt.ylim(0-step*2, 0+step*2)
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+self.today+' square_one_to_one_view.png', bbox_inches='tight')
         
 
@@ -314,7 +324,7 @@ class Visualize:
         
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+Visualize.today+' square_free_plot_view.png', bbox_inches='tight')
 
 
@@ -328,7 +338,7 @@ class Visualize:
         
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+Visualize.today+' square_free_plot_view.png', bbox_inches='tight')
             
     
@@ -408,7 +418,7 @@ class VisualizeIntraday:
     
     def __init__(self):
         plt.style.use('fivethirtyeight')
-        plt.rcParams['font.family'] = font
+        plt.rcParams['font.family'] = 'Malgun Gothic'
         plt.rcParams['axes.unicode_minus'] = False
         plt.rcParams['axes.grid'] = True
         plt.rcParams['lines.linewidth'] = 1.5
@@ -416,19 +426,29 @@ class VisualizeIntraday:
         plt.rcParams['grid.alpha'] = 0.7
         plt.rcParams['lines.antialiased'] = True
         plt.rcParams['figure.figsize'] = [15.0, 7.0]
-        plt.rcParams['savefig.dpi'] = 96
+        plt.rcParams['savefig.dpi'] = 300
         plt.rcParams['font.size'] = 12
         plt.rcParams['legend.fontsize'] = 'medium'
         plt.rcParams['figure.titlesize'] = 'medium'
 
         
     
+    def str_list(self, s_cd):
+        cds = []
+        if type(s_cd) == str:
+            cds = []
+            cds.append(s_cd)
+        else:
+            cds = s_cd    
+        return(cds)
+
+    
     def price_view(self, df, b_date, s_cd, size=(15,7), make_file=False):
         
-        cds = fs.str_list(s_cd)
+        cds = self.str_list(s_cd)
             
         fig, ax = plt.subplots(figsize=size)
-        x = df.loc[b_date:].index
+        x = df.loc[b_date:].index.astype('str')
 
         plt.autoscale(True, axis='both')
         
@@ -445,18 +465,18 @@ class VisualizeIntraday:
         
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+VisualizeIntraday.today+cds[0]+' price_view.png', bbox_inches='tight')
 
                 
     def index_view(self, df, b_date, s_cd, size=(15,7), make_file=False):
             
         fig, ax = plt.subplots(figsize=size)
-        x = df.loc[b_date:].index
+        x = df.loc[b_date:].index.astype('str')
 
         plt.autoscale(True, axis='both')
         
-        cds = fs.str_list(s_cd)
+        cds = self.str_list(s_cd)
         
         for c in cds:
             plt.plot(x, df.loc[b_date:, c] / df.loc[b_date, c] * 100, label=c)
@@ -471,17 +491,17 @@ class VisualizeIntraday:
             
         plt.legend()
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+Visualize.today+s_cd[0]+' index_view.png', bbox_inches='tight')
 
 
     def complex_view(self, df, b_date, cd_set_a, cd_set_b=[], size=(15,7), make_file=False):
         
-        cds_a = fs.str_list(cd_set_a)
-        cds_b = fs.str_list(cd_set_b)      
+        cds_a = self.str_list(cd_set_a)
+        cds_b = self.str_list(cd_set_b)      
             
         fig, ax1 = plt.subplots(figsize=size)
-        x = df.loc[b_date:].index
+        x = df.loc[b_date:].index.astype('str')
 
         plt.autoscale(True, axis='both')
             
@@ -516,17 +536,17 @@ class VisualizeIntraday:
 
         ax1.legend(loc=0)
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+Visualize.today+cds_a[0]+' complex_view.png', bbox_inches='tight')
         
         
     def multi_line_view(self, df, b_date, cd_set_a, cd_set_b=[], size=(15,7), make_file=False):
         
-        cds_a = fs.str_list(cd_set_a)
-        cds_b = fs.str_list(cd_set_b)           
+        cds_a = self.str_list(cd_set_a)
+        cds_b = self.str_list(cd_set_b)           
             
         fig, ax1 = plt.subplots(figsize=size)
-        x = df.loc[b_date:].index
+        x = df.loc[b_date:].index.astype('str')
 
         plt.autoscale(True, axis='both')
             
@@ -562,14 +582,14 @@ class VisualizeIntraday:
         
         ax1.legend(loc=0)
         
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+Visualize.today+cds_a[0]+' multi_line_view.png', bbox_inches='tight')
             
-    def position_view_area(self, df, s_cd, size=(15,1), make_file=False):
-        cds = fs.str_list(s_cd)    
+    def position_view(self, df, s_cd, size=(15,1), make_file=False):
+        cds = self.str_list(s_cd)    
             
         fig, ax = plt.subplots(figsize=size)
-        x = df.index
+        x = df.index.astype('str')
         
         for c in cds:
             df['ps'+c] = 0
@@ -579,8 +599,34 @@ class VisualizeIntraday:
             df.loc[ df['p '+c] == 'ls', ['ps'+c] ] = -1
             df.loc[ df['p '+c] == 'ss', ['ps'+c] ] = -1
             df.loc[ df['p '+c] == 'zs', ['ps'+c] ] = -1
-            plt.fill_between(x, df['ps'+c], 0, label=c)
+            #plt.fill_between(x, df['ps'+c], 0, label=c)
+            plt.bar(range(x.size), df['ps' + c], width=1, label=c)
         plt.yticks([-1, 0, 1], ["Short", "Zero", "Long"])
+        
+        x_length = len(x)
+        jump = int( x_length / 10 )
+        xs = list()
+        for i in range(10):
+            xs.append(x[jump*i])
+        xs.append(x[-1])
+        plt.xticks(np.arange(0, x_length+jump, jump), xs, rotation=45)
+
+        plt.legend()
+
+        if make_file == True:
+            plt.savefig('./image/'+VisualizeIntraday.today+cds[0]+' position_view.png', bbox_inches='tight')
+    
+        
+    def pair_trend_price_view(self, df, thd, s_cd, make_file=False, size=(15,7)):
+        cds = self.str_list(s_cd)   
+        
+        fig, ax = plt.subplots(figsize=size)
+        x = df.index.astype('str')
+
+        plt.fill_between(x, df[cds[1]+' expected']*(1+thd), df[cds[1]+' expected']*(1-thd), facecolor='sienna', alpha=0.2)
+        plt.plot(x, df[cds[1]+' expected'], 'sienna', linestyle='--')
+        plt.plot(x, df[cds[0]], 'C0')
+        plt.plot(x, df[cds[1]], 'C1', lw=3)
         
         x_length = len(x)
         jump = int( x_length / 10 )
@@ -591,64 +637,22 @@ class VisualizeIntraday:
         plt.xticks(np.arange(0, x_length+jump, jump), xs, rotation=45)
         
         plt.legend()
-        
-        if make_file:
-            plt.savefig('./image/'+VisualizeIntraday.today+cds[0]+' position_view.png', bbox_inches='tight')
-
-    def position_view(self, df, s_cd, size=(15, 1), make_file=False):
-        cds = fs.str_list(s_cd)
-
-        fig, ax = plt.subplots(figsize=size)
-        x = df.index
-
-        for c in cds:
-            df['ps' + c] = 0
-            df.loc[df['p ' + c] == 'll', ['ps' + c]] = 1
-            df.loc[df['p ' + c] == 'sl', ['ps' + c]] = 1
-            df.loc[df['p ' + c] == 'zl', ['ps' + c]] = 1
-            df.loc[df['p ' + c] == 'ls', ['ps' + c]] = -1
-            df.loc[df['p ' + c] == 'ss', ['ps' + c]] = -1
-            df.loc[df['p ' + c] == 'zs', ['ps' + c]] = -1
-            plt.bar(range(x.size), df['ps'+c], width=1, label=c)
-        plt.yticks([-1, 0, 1], ["Short", "Zero", "Long"])
-
-        x_length = len(x)
-        jump = int(x_length / 10)
-        xs = list()
-        for i in range(10):
-            xs.append(x[jump * i])
-        xs.append(x[-1])
-        plt.xticks(np.arange(0, x_length + jump, jump), xs, rotation=45)
-
-        plt.legend()
-
-        if make_file:
-            plt.savefig('./image/' + VisualizeIntraday.today + cds[0] + ' position_view.png', bbox_inches='tight')
-        
-    def pair_trend_price_view(self, df, thd, s_cd, make_file=False, size=(15,7)):
-        fig, ax = plt.subplots(figsize=size)
-        x = df.index
-
-        plt.fill_between(x, df[s_cd[1]+' expected']*(1+thd), df[s_cd[1]+' expected']*(1-thd), facecolor='sienna', alpha=0.2)
-        plt.plot(x, df[s_cd[1]+' expected'], 'sienna', linestyle='--')
-        plt.plot(x, df[s_cd[0]], 'C0')
-        plt.plot(x, df[s_cd[1]], 'C1', lw=3)
-        plt.legend()
-        if make_file:
-            plt.savefig('./image/'+VisualizeIntraday.today+s_cd[0]+' pairs_trend_price_view.png', bbox_inches='tight')
+        if make_file == True:
+            plt.savefig('./image/'+VisualizeIntraday.today+cds[0]+' pairs_trend_price_view.png', bbox_inches='tight')
         
         
     def pair_trend_index_view(self, df, thd, s_cd, make_file=False, size=(15,7)):
+        cds = self.str_list(s_cd)   
         fig, ax1 = plt.subplots(figsize=size)
-        x = df.index
+        x = df.index.astype('str')
 
-        ax1.fill_between(x, df[s_cd[1]+' expected']*(1+thd), df[s_cd[1]+' expected']*(1-thd), facecolor='sienna', alpha=0.2)
-        ax1.plot(x, df[s_cd[1]+' expected'], 'sienna', linestyle='--')
-        ax1.plot(x, df[s_cd[1]], 'C1', lw=3)
+        ax1.fill_between(x, df[cds[1]+' expected']*(1+thd), df[cds[1]+' expected']*(1-thd), facecolor='sienna', alpha=0.2)
+        ax1.plot(x, df[cds[1]+' expected'], 'sienna', linestyle='--')
+        ax1.plot(x, df[cds[1]], 'C1', lw=3)
         
         ax2 = ax1.twinx()
-        ax2.plot(x, df[s_cd[0]], 'C0', alpha=0.7)
-        ax1.plot(np.nan, 'C0', label=s_cd[0])
+        ax2.plot(x, df[cds[0]], 'C0', alpha=0.7)
+        ax1.plot(np.nan, 'C0', label=cds[0])
         
         x_length = len(x)
         jump = int( x_length / 10 )
@@ -663,15 +667,15 @@ class VisualizeIntraday:
         ax2.set_xticklabels(xs, rotation=45)
 
         ax1.legend(loc=0)
-        if make_file:
-            plt.savefig('./image/'+VisualizeIntraday.today+s_cd[0]+' pairs_trend_index_view.png', bbox_inches='tight')
+        if make_file == True:
+            plt.savefig('./image/'+VisualizeIntraday.today+cds[0]+' pairs_trend_index_view.png', bbox_inches='tight')
         
         
-    def BB_trend_view(self, sample, sigma, s_cd, make_file=False, size=(15,7)):
-        cds = fs.str_list(s_cd)    
+    def bb_trend_view(self, sample, sigma, s_cd, make_file=False, size=(15,7)):
+        cds = self.str_list(s_cd)    
 
         fig, ax = plt.subplots(figsize=size)
-        x = sample.index
+        x = sample.index.astype('str')
 
         plt.fill_between(x, sample['lb'], sample['ub'], facecolor='sienna', alpha=0.2)
         plt.plot(x, sample['center'], color='sienna', linestyle='--', label='MA')
@@ -686,18 +690,19 @@ class VisualizeIntraday:
         plt.xticks(np.arange(0, x_length+jump, jump), xs, rotation=45)
         
         plt.legend()
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+VisualizeIntraday.today+cds[0]+' bb_trend_view.png', bbox_inches='tight')
         
 
     
     def futures_basis_view(self, df, threshold, s_cd, make_file=False, size=(15,7)):
             
-        cds = fs.str_list(s_cd)
+        cds = self.str_list(s_cd)
                            
         fig, ax = plt.subplots(figsize=size)
-        x = df.index
-        plt.fill_between(x, df[cds[0]], df[cds[0]]+df['basis'], facecolor='sienna', alpha=0.2)
+        x = df.index.astype('str')
+        
+        plt.fill_between(x, df[cds[0]], df[cds[0]]+threshold, facecolor='sienna', alpha=0.2)
         plt.plot(x, df[cds[0]], 'sienna', linestyle='--')
         plt.plot(x, df[cds[1]], 'C1', lw=3)
         
@@ -710,7 +715,7 @@ class VisualizeIntraday:
         plt.xticks(np.arange(0, x_length+jump, jump), xs, rotation=45)
         
         plt.legend()
-        if make_file:
+        if make_file == True:
             plt.savefig('./image/'+VisualizeIntraday.today+cds[0]+' futures_basis_view.png', bbox_inches='tight')
             
 
@@ -722,7 +727,7 @@ class Visualize3D():
     
     def __init__(self):
         plt.style.use('fivethirtyeight')
-        plt.rcParams['font.family'] = font
+        plt.rcParams['font.family'] = 'Malgun Gothic'
         plt.rcParams['axes.unicode_minus'] = False
         plt.rcParams['axes.grid'] = True
         plt.rcParams['lines.linewidth'] = 1.5
@@ -730,7 +735,7 @@ class Visualize3D():
         plt.rcParams['grid.alpha'] = 0.7
         plt.rcParams['lines.antialiased'] = True
         plt.rcParams['figure.figsize'] = [15.0, 7.0]
-        plt.rcParams['savefig.dpi'] = 96
+        plt.rcParams['savefig.dpi'] = 300
         plt.rcParams['font.size'] = 12
         plt.rcParams['legend.fontsize'] = 'medium'
         plt.rcParams['figure.titlesize'] = 'medium'
