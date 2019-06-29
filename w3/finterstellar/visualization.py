@@ -147,7 +147,8 @@ class Visualize:
             df.loc[ df['p '+c] == 'ls', ['ps'+c] ] = -1
             df.loc[ df['p '+c] == 'ss', ['ps'+c] ] = -1
             df.loc[ df['p '+c] == 'zs', ['ps'+c] ] = -1
-            plt.fill_between(x, df['ps'+c], 0, label=c)
+            plt.bar(range(x.size), df['ps' + c], width=1, label=c)
+
         plt.yticks([-1, 0, 1], ["Short", "Zero", "Long"])
         plt.legend()
         
@@ -156,7 +157,7 @@ class Visualize:
             plt.savefig('./image/'+f_name, bbox_inches='tight')
     
     
-    def position_view_bar(self, df, cd, size=(15,1), make_file=False):
+    def position_view_area(self, df, cd, size=(15,1), make_file=False):
 
         cds = fs.str_list(cd)    
 
@@ -175,7 +176,7 @@ class Visualize:
             df.loc[ df['p '+c] == 'ls', ['ps'+c] ] = -1
             df.loc[ df['p '+c] == 'ss', ['ps'+c] ] = -1
             df.loc[ df['p '+c] == 'zs', ['ps'+c] ] = -1
-            plt.bar(range(x.size), df['ps'+c], width=1, label=c)
+            plt.fill_between(x, df['ps'+c], 0, label=c)
         plt.yticks([-1, 0, 1], ["Short", "Zero", "Long"])
         plt.legend()        
         
