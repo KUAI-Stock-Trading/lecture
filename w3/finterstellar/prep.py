@@ -151,7 +151,6 @@ class LoadData:
             except:
                 pass
             prices.append(float(p))
-        print(cd, len(prices))
         df[cd] = prices
         df_new = pd.DataFrame(df[cd])
         #df = df.drop(df.columns[1:], axis=1)

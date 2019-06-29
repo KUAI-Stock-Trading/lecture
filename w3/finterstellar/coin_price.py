@@ -49,6 +49,51 @@ class CoinPrice:
         return present_time, current_price
     
     
+    def bithumb_historical_price_old(self, coin_cd='BTC', freq='M'):
+        
+        if freq == 'M':
+            frequency = '01M'
+        elif freq == 'H':
+            frequency = '01H'
+        elif freq == 'D':
+            frequency = '24H'
+        else:
+            frequency = freq
+        
+        historical_prices_url = 'https://www.bithumb.com/resources/chart/'+coin_cd+'_xcoinTrade_'+frequency+'.json?symbol='+coin_cd+'&resolution=0.5'
+        
+        source = urlopen(historical_prices_url).read()
+        data = source.decode('utf-8')
+        
+        data = data.replace('[[', '')
+        data = data.replace(']]', '')
+        data = data.split('],[')
+        
+        hp_lst = list()
+        for d in data:
+            sub_d = list()
+            for sd in d.split(','):
+                sub_d.append(re.sub('[^\d.]', '', sd)) 
+            hp_lst.append(sub_d)
+            
+        historical_data = dict()
+        for d in hp_lst:
+            pt = int(d[0])/1000
+            present_time = dt.fromtimestamp(pt)
+            d[0] = fs.utc_kst(present_time).strftime('%Y-%m-%d %H:%M:%S')
+            d[1] = float(d[1])    # 시가
+            d[2] = float(d[2])    # 종가
+            d[3] = float(d[3])    # 고가
+            d[4] = float(d[4])    # 저가
+            d[5] = round(float(d[5]), 4)
+            historical_data[d[0]] = (d[2], d[1], d[3], d[4], d[5])
+        
+        historical_df = pd.DataFrame.from_dict(historical_data, orient='index', \
+                                               columns = ['close', 'open', 'high', 'low', 'volume'])
+        #historical_df.sort_index(ascending=False, inplace=True)
+        return historical_df
+
+    
     def bithumb_historical_price(self, coin_cd='BTC', freq='M'):
         
         if freq == 'M':
@@ -61,8 +106,20 @@ class CoinPrice:
             frequency = freq
         
         historical_prices_url = 'https://www.bithumb.com/resources/chart/'+coin_cd+'_xcoinTrade_'+frequency+'.json?symbol='+coin_cd+'&resolution=0.5'
-        source = urlopen(historical_prices_url).read()
-        data = source.decode('utf-8')
+        
+        # updated on 2019-06-24 for site renewal
+        import bs4
+        from selenium import webdriver
+
+        page = webdriver.Chrome()
+        page.implicitly_wait(1)
+        page.get(historical_prices_url)
+
+        #source = urlopen(historical_prices_url).read()
+        #data = source.decode('utf-8')
+        source = page.page_source
+        soup = bs4.BeautifulSoup(source, 'html.parser')
+        data = soup.text
         
         data = data.replace('[[', '')
         data = data.replace(']]', '')
